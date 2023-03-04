@@ -1,7 +1,5 @@
 import pygame
 from text import Text
-from surface import Surface
-from keys import key,fun_key
 
 pygame.init()
 
@@ -98,12 +96,20 @@ class App:
 
     def loop(self):
         while True:
+
+            self.key = None
+
             #looking for X to quit
             if True:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         pygame.quit()
                         exit()
+                    elif event.type == pygame.KEYDOWN:
+                        if event.unicode.isprintable():
+                            self.key = event.unicode
+                        else:
+                            self.key = pygame.key.name(event.key)
 
             self.write_def()
             self.key_def()
@@ -115,33 +121,15 @@ class App:
 
     def key_def(self):
 
-        self.key = key()
-        self.fun_key = fun_key()
-
         #write lovercase
-        if (self.key != None and self.key != self.last_key) and not(self.fun_key in self.fun_list):
-                self.write_list.insert(-2,str(self.key))
-
-        #fun keys
-        if self.fun_key != None:
-            #shift
-            if self.fun_key == "shift" and (self.key != None and self.key != self.last_key):
-                if self.key in self.alphabet:
-                    self.write_list.insert(-2,str(self.key.capitalize()))
-
+        if self.key != None:
             #backspace
-            if self.fun_key == "backspace":
-                if len(self.write_list) >= 3 and self.backnum == 5:
+            if self.key == "backspace":
+                if len(self.write_list) >= 3:
                     self.write_list.pop(-2)
-                if self.backnum == 5:
-                    self.backnum = 0
-                if self.last_fun_key != "backspace":
-                    self.backnum = 0
 
-                self.backnum += 1
-            
             #enter
-            elif self.fun_key == "enter" and self.fun_key != self.last_fun_key:
+            elif self.key == "return":
                 Text("/home $ ",self.gruop,(self.x,self.y))
                 Text(self.write.replace("|"," ",-2),self.gruop,(self.x + self.path_line.image.get_width(),self.y))
 
@@ -151,8 +139,8 @@ class App:
                 
                 self.write_list = [" ",""]
 
-        self.last_key = self.key
-        self.last_fun_key = self.fun_key
+            else:
+                self.write_list.insert(-2,str(self.key))
 
     def write_def(self):
             if self.write_list[-2] == " " and self.num == 20:
