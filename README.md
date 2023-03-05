@@ -1,6 +1,8 @@
 # Python terminal (using pygame)
 
-Terminal like app
+Python app like terminal 
+where you can add your own code 
+and custom ui using pygame. 
 
 ## Adjustable function
 
