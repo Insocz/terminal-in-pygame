@@ -1,4 +1,4 @@
-import pygame
+import pygame, pathlib, os
 from text import Text
 
 pygame.init()
@@ -28,63 +28,6 @@ class App:
 
             self.x = 15
             self.y = 5
-
-            #dirs for combinatet characters
-            if True:
-                self.fun_list = [
-                    "backspace",
-                    "escape",
-                    "shift",
-                    "left ctrl",
-                    "right ctrl",
-                    "left alt",
-                    "right alt",
-                    "caps lock",
-                    "pause",
-                    "home",
-                ]
-
-                self.shift_list = {
-                    ";": "˚",
-                    "=":"%",
-                    "ú":"/",
-                    ")":"(",
-                    "ů":'"',
-                    "§":"!",
-                    ",":"?",
-                    ".":":",
-                    "-":"_",
-                    "\\":"|",
-                }
-
-                self.alphabet = [
-                    "a",
-                    "b",
-                    "c",
-                    "d",
-                    "e",
-                    "f",
-                    "g",
-                    "h",
-                    "i",
-                    "j",
-                    "k",
-                    "l",
-                    "m",
-                    "n",
-                    "o",
-                    "p",
-                    "q",
-                    "r",
-                    "s",
-                    "t",
-                    "u",
-                    "v",
-                    "w",
-                    "x",
-                    "y",
-                    "z"
-                ]
 
         self.gruop = pygame.sprite.Group()
 
@@ -121,15 +64,21 @@ class App:
 
     def key_def(self):
 
+        self.back = pygame.key.get_pressed()
+
+        #backspace
+        if self.back[pygame.K_BACKSPACE]:
+            if len(self.write_list) >= 3 and self.backnum == 5:
+                self.write_list.pop(-2)
+            if self.backnum == 5 or not(self.last_key):
+                self.backnum = 0
+
+            self.backnum += 1
+
         #write lovercase
         if self.key != None:
-            #backspace
-            if self.key == "backspace":
-                if len(self.write_list) >= 3:
-                    self.write_list.pop(-2)
-
             #enter
-            elif self.key == "return":
+            if self.key == "return":
                 Text("/home $ ",self.gruop,(self.x,self.y))
                 Text(self.write.replace("|"," ",-2),self.gruop,(self.x + self.path_line.image.get_width(),self.y))
 
@@ -139,8 +88,14 @@ class App:
                 
                 self.write_list = [" ",""]
 
-            else:
+            #tab
+            elif self.key == "tab":
+                self.write_list.insert(-2,"    ")                
+
+            elif self.key != "backspace":
                 self.write_list.insert(-2,str(self.key))
+
+        self.last_key = self.back[pygame.K_BACKSPACE]
 
     def write_def(self):
             if self.write_list[-2] == " " and self.num == 20:
@@ -156,5 +111,6 @@ class App:
             self.write = self.write.join(self.write_list[0:-1])
 
             self.com_line.write = self.write
+
 
 App()
