@@ -83,7 +83,6 @@ class App:
             if self.key in ["left","right","up","down"]:
                 #left
                 if self.key == "left" and abs(self.index_cursor) != len(self.write_list):
-                    print(abs(self.index_cursor) - 1 != len(self.write_list)) 
                     char_old = self.write_list[self.index_cursor - 1]
                     cursor_old = self.write_list[self.index_cursor]
 
@@ -112,6 +111,8 @@ class App:
                 self.com_line.rect.centery += 25
                 
                 self.write_list = ["  ",""]
+
+                self.index_cursor = -2
 
             #tab
             elif self.key == "tab":
