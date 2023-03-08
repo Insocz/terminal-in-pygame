@@ -24,6 +24,9 @@ class App:
 
             self.write_list = [" ","end"]
 
+            self.histry_list = []
+            self.histry_num = 0
+
             self.index_cursor = -2
 
             self.write = ""
@@ -77,8 +80,8 @@ class App:
 
             self.backnum += 1
 
-        #write lovercase
-        if self.key != None:
+        #keys
+        if self.key != None and self.key != "":
             #arows
             if self.key in ["left","right","up","down"]:
                 #left
@@ -101,18 +104,61 @@ class App:
 
                     self.index_cursor += 1
 
+                #up
+                if self.key == "up" and self.histry_list != []:
+                    #reset
+                    self.write_list = ["  ","end"]
+                    self.index_cursor = -2
+
+                    if self.histry_num != 0:
+                        self.histry_num -= 1
+                    else:
+                        self.histry_num = len(self.histry_list) - 1
+
+                    for get in self.histry_list[self.histry_num]:
+                        self.write_list.insert(self.index_cursor,get)
+
+                #down
+                if self.key == "down" and self.histry_list != []:
+                    #reset
+                    self.write_list = ["  ","end"]
+                    self.index_cursor = -2
+
+                    if self.histry_num <= len(self.histry_list) - 2:
+                        self.histry_num += 1
+                    else:
+                        self.histry_num = 0
+
+                    for get in self.histry_list[self.histry_num]:
+                        self.write_list.insert(self.index_cursor,get)
+
             #enter
             elif self.key == "return" or self.key == "enter":
-                Text("/home $ ",self.gruop,(self.x,self.y))
-                Text(self.write.replace("|","  ",self.index_cursor),self.gruop,(self.x + self.path_line.image.get_width(),self.y))
+                #history list
+                if True:
+                    old_list = self.write_list
+                    old_list.pop(self.index_cursor)
+                    old_list.pop(-1)
+                    
+                    if old_list != []:
+                        self.histry_list.append(old_list)
 
-                self.y += 25
-                self.path_line.rect.centery += 25
-                self.com_line.rect.centery += 25
-                
-                self.write_list = ["  ",""]
+                #new text
+                if True:
+                    Text("/home $ ",self.gruop,(self.x,self.y))
+                    
+                    text = self.write.replace("|","  ",self.index_cursor)
+                    text = text.replace("  ","",self.index_cursor)
+                    
+                    Text(text,self.gruop,(self.x + self.path_line.image.get_width(),self.y))
 
-                self.index_cursor = -2
+                    self.y += 25
+                    self.path_line.rect.centery += 25
+                    self.com_line.rect.centery += 25
+
+                    self.write_list = ["  ","end"]
+
+                    self.index_cursor = -2
 
             #tab
             elif self.key == "tab":
@@ -124,6 +170,7 @@ class App:
         self.last_key = self.back[pygame.K_BACKSPACE]
 
     def write_def(self):
+            #cursor
             if self.write_list[self.index_cursor] == "  " and self.num == 20:
                 self.write_list[self.index_cursor] = "|"
                 self.num = 0
