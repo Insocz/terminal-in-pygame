@@ -22,7 +22,9 @@ class App:
 
             self.last_key = None
 
-            self.write_list = [" ",""]
+            self.write_list = [" ","end"]
+
+            self.index_cursor = -2
 
             self.write = ""
 
@@ -49,7 +51,7 @@ class App:
                         pygame.quit()
                         exit()
                     elif event.type == pygame.KEYDOWN:
-                        if event.unicode.isprintable():
+                        if event.unicode.isprintable() and not(pygame.key.name(event.key) in ["left","right","up","down"]):
                             self.key = event.unicode
                         else:
                             self.key = pygame.key.name(event.key)
@@ -67,42 +69,65 @@ class App:
         self.back = pygame.key.get_pressed()
 
         #backspace
-        if self.back[pygame.K_BACKSPACE]:
-            if len(self.write_list) >= 3 and self.backnum == 5:
-                self.write_list.pop(-2)
-            if self.backnum == 5 or not(self.last_key):
-                self.backnum = 0
+        if self.back[pygame.K_BACKSPACE] and abs(self.index_cursor) != len(self.write_list):
+            if self.backnum == 10 or not(self.last_key):
+                self.backnum = 0            
+            if len(self.write_list) >= 3 and (self.backnum == 9 or not(self.last_key)):
+                self.write_list.pop(self.index_cursor)
 
             self.backnum += 1
 
         #write lovercase
         if self.key != None:
+            #arows
+            if self.key in ["left","right","up","down"]:
+                #left
+                if self.key == "left" and abs(self.index_cursor) != len(self.write_list):
+                    print(abs(self.index_cursor) - 1 != len(self.write_list)) 
+                    char_old = self.write_list[self.index_cursor - 1]
+                    cursor_old = self.write_list[self.index_cursor]
+
+                    self.write_list[self.index_cursor] = char_old
+                    self.write_list[self.index_cursor - 1] = cursor_old
+
+                    self.index_cursor -= 1
+
+                #rigth
+                if self.key == "right" and self.write_list[self.index_cursor + 1] != "end":
+                    char_old = self.write_list[self.index_cursor + 1]
+                    cursor_old = self.write_list[self.index_cursor]
+
+                    self.write_list[self.index_cursor] = char_old
+                    self.write_list[self.index_cursor + 1] = cursor_old
+
+                    self.index_cursor += 1
+
             #enter
-            if self.key == "return":
+            elif self.key == "return" or self.key == "enter":
                 Text("/home $ ",self.gruop,(self.x,self.y))
-                Text(self.write.replace("|"," ",-2),self.gruop,(self.x + self.path_line.image.get_width(),self.y))
+                Text(self.write.replace("|","  ",self.index_cursor),self.gruop,(self.x + self.path_line.image.get_width(),self.y))
 
                 self.y += 25
                 self.path_line.rect.centery += 25
                 self.com_line.rect.centery += 25
                 
-                self.write_list = [" ",""]
+                self.write_list = ["  ",""]
 
             #tab
             elif self.key == "tab":
-                self.write_list.insert(-2,"    ")                
+                self.write_list.insert(self.index_cursor,"    ")       
 
             elif self.key != "backspace":
-                self.write_list.insert(-2,str(self.key))
+                self.write_list.insert(self.index_cursor,str(self.key))
 
         self.last_key = self.back[pygame.K_BACKSPACE]
 
     def write_def(self):
-            if self.write_list[-2] == " " and self.num == 20:
-                self.write_list[-2] = "|"
+            if self.write_list[self.index_cursor] == "  " and self.num == 20:
+                self.write_list[self.index_cursor] = "|"
                 self.num = 0
             elif self.num == 20:
-                self.write_list[-2] = " "
+                self.write_list[self.index_cursor] = "  "
                 self.num = 0
 
             self.num += 1

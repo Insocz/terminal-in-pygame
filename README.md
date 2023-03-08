@@ -1,8 +1,6 @@
 # Python terminal (using pygame)
 
-Python app like terminal 
-where you can add your own code 
-and custom ui using pygame. 
+Terminal like app
 
 ## Adjustable function
 
@@ -22,6 +20,7 @@ and custom ui using pygame.
 * path system
 * adding commands
 * custom commands for this terminal
+* lot more
 
 ## My contacts
 
@@ -30,4 +29,4 @@ and custom ui using pygame.
 ## Warning
 
 * This app is not intended for work environment.
-* Use at one's own risk. 
+* Use at one's own risk.
