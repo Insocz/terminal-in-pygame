@@ -23,20 +23,22 @@ class App:
             self.last_key = None
 
             self.write_list = [" ","end"]
+            self.write = ""
 
             self.histry_list = []
             self.histry_num = 0
 
             self.index_cursor = -2
 
-            self.write = ""
-
             self.x = 15
             self.y = 5
 
+            self.path = pathlib.Path.home()
+            self.path.parent
+
         self.gruop = pygame.sprite.Group()
 
-        self.path_line = Text("/home $ ",self.gruop,(self.x,self.y))
+        self.path_line = Text(f"{self.path} $ ",self.gruop,(self.x,self.y))
 
         self.com_line = Text(self.write,self.gruop,(self.x + self.path_line.image.get_width(),self.y))
 
@@ -145,7 +147,7 @@ class App:
 
                 #new text
                 if True:
-                    Text("/home $ ",self.gruop,(self.x,self.y))
+                    Text(f"{self.path} $ ",self.gruop,(self.x,self.y))
                     
                     text = self.write.replace("|","  ",self.index_cursor)
                     text = text.replace("  ","",self.index_cursor)
@@ -184,6 +186,5 @@ class App:
             self.write = self.write.join(self.write_list[0:-1])
 
             self.com_line.write = self.write
-
 
 App()

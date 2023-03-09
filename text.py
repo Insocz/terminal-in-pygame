@@ -10,7 +10,7 @@ class Text(pygame.sprite.Sprite):
         self.color = color
         self.xy = xy
 
-        self.font = pygame.font.Font("your font",20)
+        self.font = pygame.font.Font(None,20)
         self.image = self.font.render(self.write, True, self.color)
         self.rect = self.image.get_rect(topleft=self.xy)
 

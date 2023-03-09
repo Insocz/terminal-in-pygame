@@ -2,6 +2,8 @@
 
 Terminal like app
 
+* not done yet
+
 ## Adjustable function
 
 * custom ui that you can change
